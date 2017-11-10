@@ -16,8 +16,7 @@ defmodule MQTools.Provider.Dispatcher do
   end
 
   def run do
-    conn_opts = Application.fetch_env!(:mq_provider, :connection)
-    {:ok, conn} = AMQP.Connection.open(conn_opts)
+    {conn = MQTools.amqp_connection
     {:ok, chan} = AMQP.Channel.open(conn)
     for {queue, module} <- rpc_handler_queues() do
       AMQP.Queue.declare(chan, queue)
