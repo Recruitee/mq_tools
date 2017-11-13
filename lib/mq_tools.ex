@@ -19,11 +19,11 @@ defmodule MQTools do
     # this needs to be revised, as we probably don't wanna restart requests on client failure etc.
     # Might break concurent requests when one of them fail.
 
-    Supervisor.start_link(children ++ [
-      worker(MQTools.Client.Requests, []),
-      worker(MQTools.Client),
+    Supervisor.start_link([
       worker(MQTools.AMQPConnection, [conn_opts]),
-    ], strategy: :one_for_all, name: __MODULE__)
+      worker(MQTools.Client.Requests, []),
+      worker(MQTools.Client, []),
+    ] ++ children, strategy: :one_for_all, name: __MODULE__)
 
   end
 

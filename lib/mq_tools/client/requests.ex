@@ -1,4 +1,4 @@
-defmodule MQClient.Requests do
+defmodule MQTools.Client.Requests do
 
   def start_link do
     Agent.start_link(fn -> %{} end, name: __MODULE__)

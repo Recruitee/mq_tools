@@ -2,13 +2,12 @@ defmodule MQTools.Packer do
   @callback pack(term) :: String.t
   @callback unpack(String.t) :: term
 
-
-  defp pack(term) do
-    packer.pack(term)
+  def pack(term) do
+    packer().pack(term)
   end
 
-  defp unpack(data) do
-    packer.unpack(data)
+  def unpack(data) do
+    packer().unpack(data)
   end
 
   defp packer do
@@ -21,7 +20,7 @@ defmodule MQTools.Packer do
 end
 
 defmodule MQTools.JsonPacker do
-  @behaviour Packer
+  @behaviour MQTools.Packer
 
   def pack(term) do
     Poison.encode!(term)

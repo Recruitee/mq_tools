@@ -2,7 +2,7 @@ defmodule MQTools.Provider.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :mq_provider,
+    [app: :mq_tools,
      version: "0.1.0",
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
@@ -16,7 +16,7 @@ defmodule MQTools.Provider.Mixfile do
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
     [extra_applications: [:logger],
-     mod: {MQTools.Provider, []}]
+     mod: {MQTools, []}]
   end
 
   # Dependencies can be Hex packages:

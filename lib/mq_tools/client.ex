@@ -12,7 +12,7 @@ defmodule MQTools.Client do
   end
 
   def publish(name, params) do
-    GenServer.info(__MODULE__, {:publish, name, params})
+    GenServer.cast(__MODULE__, {:publish, name, params})
   end
 
   def start_link do
@@ -39,18 +39,18 @@ defmodule MQTools.Client do
     {:noreply, state}
   end
 
-  def handle_info({:publish, name, params}, _from, state) do
+  def handle_cast({:publish, name, params}, _from, state) do
     AMQP.Basic.publish(state.chan, "", name, pack(params))
     {:noreply, state}
   end
 
   def handle_info({:basic_consume_ok, info}, state) do
-    Logger.debug "Consumer set up: #{inspect info}"
+    Logger.debug "Client consumer set: #{inspect info}"
     {:noreply, state}
   end
 
   def handle_info({:basic_cancel, info}, state) do
-    Logger.error "Consumer canceled: #{inspect info}"
+    Logger.error "Client consumer canceled: #{inspect info}"
     {:noreply, state}
   end
 

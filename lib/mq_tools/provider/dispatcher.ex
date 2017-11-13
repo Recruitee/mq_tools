@@ -16,7 +16,7 @@ defmodule MQTools.Provider.Dispatcher do
   end
 
   def run do
-    {conn = MQTools.amqp_connection
+    conn = MQTools.amqp_connection
     {:ok, chan} = AMQP.Channel.open(conn)
     for {queue, module} <- rpc_handler_queues() do
       AMQP.Queue.declare(chan, queue)
@@ -32,7 +32,7 @@ defmodule MQTools.Provider.Dispatcher do
 
   defp loop(chan) do
     receive do
-      {:basic_consume_ok} ->
+      {:basic_consume_ok, _} ->
         nil
       {:basic_deliver, payload, meta} ->
         if dispatch(payload, meta) do
