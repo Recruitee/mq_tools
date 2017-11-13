@@ -1,6 +1,7 @@
 require Logger
 
-defmodule MQClient do
+defmodule MQTools.Client do
+
   use GenServer
   import MQTools.Packer, only: [pack: 1, unpack: 1]
 
