@@ -65,7 +65,7 @@ defmodule MQTools.Provider.Dispatcher do
   end
 
   defp rpc_handler_queues do
-    provider_modules = Application.fetch_env!(:mq_provider, :rpc_providers)
+    provider_modules = Application.get_env(:mq_provider, :rpc_providers, [])
     Enum.flat_map(provider_modules, fn provider_module ->
       Enum.map(provider_module.rpc_names, fn name ->
         {name, provider_module}

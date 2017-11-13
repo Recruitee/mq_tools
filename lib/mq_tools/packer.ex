@@ -11,10 +11,7 @@ defmodule MQTools.Packer do
   end
 
   defp packer do
-    case Application.fetch_env(:mq_provider, :packer) do
-      :error -> MQTools.JsonPacker
-      packer -> packer
-    end
+    Application.get_env(:mq_provider, :packer, MQTools.JsonPacker)
   end
 
 end
