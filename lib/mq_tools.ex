@@ -11,11 +11,6 @@ defmodule MQTools do
       :error -> raise "Missing config option: mq_tools.connection"
     end
 
-    children = if Application.get_env(:mq_tools, :rpc_providers), do:
-      [worker(MQTools.Provider.Dispatcher, []),
-      supervisor(MQTools.Provider.HandlerSupervisor, [])],
-    else: []
-
     # this needs to be revised, as we probably don't wanna restart requests on client failure etc.
     # Might break concurent requests when one of them fail.
 
@@ -23,7 +18,9 @@ defmodule MQTools do
       worker(MQTools.AMQPConnection, [conn_opts]),
       worker(MQTools.Client.Requests, []),
       worker(MQTools.Client, []),
-    ] ++ children, strategy: :one_for_all, name: __MODULE__)
+      worker(MQTools.Provider.Dispatcher, []),
+      supervisor(MQTools.Provider.HandlerSupervisor, [])
+    ], strategy: :one_for_all, name: __MODULE__)
 
   end
 

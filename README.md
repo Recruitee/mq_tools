@@ -1,17 +1,19 @@
-# MQTools.Provider
+# MQTools
 
-Easy way to define rabbitmq based rpc providers.
+Easily defined rabbitmq providers and client for "rpc" pattern - as described here: https://www.rabbitmq.com/tutorials/tutorial-six-elixir.html
 
-## Usage
+This software is still in early beta version. Use at your own discretion.
 
-* Add `mq_provider` to dependencies in mix.exs
-* Add `mq_provider` to extra_applications in mix.exs
 
+## MQTools.Provider
+
+Let's you define rabbitmq 'rpc endpoints'.
+
+* Add `mq_tools` to dependencies in mix.exs
 * Configure the module:
 
 ```
 config :mq_tools, :mq_providers,
-  rpc_providers: [],
   connection: [
     host: "localhost",
     port: 5672,
@@ -37,12 +39,31 @@ end
 and add the module to the config:
 
 ```
+config :mq_tools, :mq_providers,
   rpc_providers: [MyRpcHandlers],
+```
+
+## MQTools.Client
+
+Call previously defined providers. The one defined above could be called like so:
+
+```
+> MQTools.Client.call("foo.bar", %{something: "here"})
+=> "reply..."
+> MQTools.Client.call("foo.bar", %{different: "request"})
+=> "handle other payload"
+```
+
+In case you just want to publish a message and you are not interested in the reply you can do the following:
+
+```
+> MQTools.Client.publish("foo.bar", %{something: "here"})
+=> :ok
 ```
 
 ## Optional message encoding configuration
 
-By default the messages are transported as json. If you want to change that you can define your own message encoder/decoder module.
+By default the messages are transported using json. If you want to change that you can define your own message encoder/decoder module.
 
 ```
 defmodule MyOwnMsgPacker do
@@ -68,8 +89,8 @@ config :mq_provider,
 
 
 ## Kudos
-Orignally written by: https://github.com/nilclass
+Orignally written by https://github.com/nilclass
 
 ## License
 
-Ruby on Rails is released under the [MIT License](https://opensource.org/licenses/MIT).
+MQTools is released under the [MIT License](https://opensource.org/licenses/MIT).
