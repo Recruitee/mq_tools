@@ -11,6 +11,11 @@ defmodule MQTools.Client do
     GenServer.call(__MODULE__, {:call, name, params})
   end
 
+  def call!(name, params) do
+    {:ok, value} = call(name, params)
+    value
+  end
+
   def publish(name, params) do
     GenServer.cast(__MODULE__, {:publish, name, params})
   end
