@@ -61,6 +61,13 @@ In case you just want to publish a message and you are not interested in the rep
 => :ok
 ```
 
+There is also optional client timeout param if you ever need it (default 10000ms):
+
+```
+> MQTools.Client.call("foo.bar", %{something: "here"}, 7500) # timeout in ms
+=> "slow reply..."
+```
+
 ## Optional message encoding configuration
 
 By default the messages are transported using json. If you want to change that you can define your own message encoder/decoder module.

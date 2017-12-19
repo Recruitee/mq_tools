@@ -7,8 +7,8 @@ defmodule MQTools.Client do
 
   alias MQTools.Client.Requests
 
-  def call(name, params) do
-    GenServer.call(__MODULE__, {:call, name, params})
+  def call(name, params, timeout \\ 10000) do
+    GenServer.call(__MODULE__, {:call, name, params}, timeout)
   end
 
   def call!(name, params) do
