@@ -1,5 +1,7 @@
 require Logger
 
+defmodule MQTools.ProviderError, do: defexception [:message]
+
 defmodule MQTools.Client do
 
   use GenServer
@@ -13,7 +15,13 @@ defmodule MQTools.Client do
 
   def call!(name, params) do
     {:ok, value} = call(name, params)
-    value
+
+    case value do
+      %{"provider_error" => error} ->
+        raise MQTools.ProviderError, message: error
+      _ ->
+        value
+    end
   end
 
   def publish(name, params) do

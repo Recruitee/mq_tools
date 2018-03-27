@@ -8,16 +8,13 @@ defmodule MQTools.Provider.Handler do
   end
 
   def run(module, queue, data, meta) do
-    reply = safe_call(module, queue, data)
+    reply = module.handle_rpc(queue, unpack(data))
     send(MQTools.Provider.Dispatcher, {:reply, pack(reply), meta})
-  end
-
-  defp safe_call(module, queue, data) do
-    module.handle_rpc(queue, unpack(data))
   rescue
-    e -> %{"error" => Exception.format(:error, e)}
-  catch
-    :exit, reason -> %{"error" => "Caught exit: #{inspect reason}"}
+    e ->
+      stacktrace = System.stacktrace
+      reply = %{"provider_error" => Exception.format(:error, e)}
+      send(MQTools.Provider.Dispatcher, {:reply, pack(reply), meta})
+      reraise(e, stacktrace)
   end
-
 end
