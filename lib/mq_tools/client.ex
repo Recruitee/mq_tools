@@ -35,6 +35,7 @@ defmodule MQTools.Client do
   # CALLBACKS
 
   def init(_) do
+    Process.flag(:trap_exit, true)
     conn = MQTools.amqp_connection
     {:ok, chan} = AMQP.Channel.open(conn)
     {:ok, %{queue: queue}} = AMQP.Queue.declare(chan)
