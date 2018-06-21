@@ -52,10 +52,12 @@ defmodule MQTools.Client do
     {:noreply, state}
   end
 
-  def handle_cast({:publish, name, params}, _from, state) do
+  def handle_cast({:publish, name, params}, state) do
     AMQP.Basic.publish(state.chan, "", name, pack(params))
     {:noreply, state}
   end
+
+  def handle_cast(_, state), do: {:noreply, state}
 
   def handle_info({:basic_consume_ok, info}, state) do
     Logger.debug "Client consumer set: #{inspect info}"
