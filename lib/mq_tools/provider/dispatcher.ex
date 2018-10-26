@@ -41,7 +41,7 @@ defmodule MQTools.Provider.Dispatcher do
           AMQP.Basic.nack(chan, meta.delivery_tag)
         end
       {:reply, payload, meta} ->
-        Logger.debug "Replying to RPC #{meta.routing_key} (#{meta.correlation_id})"
+        Logger.debug "Replying to RPC #{meta.routing_key} (#{meta.correlation_id})" <> " | " <> payload
         AMQP.Basic.publish(chan, "", meta.reply_to, payload, correlation_id: meta.correlation_id)
       other ->
         Logger.debug "#{__MODULE__} ignoring #{inspect other}"
@@ -56,7 +56,7 @@ defmodule MQTools.Provider.Dispatcher do
     )
     case handler do
       {queue, module} ->
-        Logger.debug "Handling RPC #{meta.routing_key} (#{meta.correlation_id})"
+        Logger.debug "Handling RPC #{meta.routing_key} (#{meta.correlation_id})" <> " | " <> data
         MQTools.Provider.HandlerSupervisor.spawn_handler([module, queue, data, meta])
       _ ->
         Logger.debug "Not handling unknown RPC #{meta.routing_key}"
