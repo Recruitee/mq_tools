@@ -24,8 +24,8 @@ defmodule MQTools.Client do
     end
   end
 
-  def publish(name, params) do
-    GenServer.cast(__MODULE__, {:publish, name, params})
+  def publish(name, params, opts \\ []) do
+    GenServer.cast(__MODULE__, {:publish, name, params, opts})
   end
 
   def start_link do
@@ -52,8 +52,8 @@ defmodule MQTools.Client do
     {:noreply, state}
   end
 
-  def handle_cast({:publish, name, params}, state) do
-    AMQP.Basic.publish(state.chan, "", name, pack(params))
+  def handle_cast({:publish, name, params, opts}, state) do
+    AMQP.Basic.publish(state.chan, "", name, pack(params), opts)
     {:noreply, state}
   end
 
