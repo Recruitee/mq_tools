@@ -28,16 +28,16 @@ defmodule MQTools.Client do
     GenServer.cast(__MODULE__, {:publish, name, params, opts})
   end
 
-  def start_link do
-    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  def start_link(queue_opts) do
+    GenServer.start_link(__MODULE__, queue_opts, name: __MODULE__)
   end
 
   # CALLBACKS
 
-  def init(_) do
+  def init(queue_opts) do
     conn = MQTools.amqp_connection
     {:ok, chan} = AMQP.Channel.open(conn)
-    {:ok, %{queue: queue}} = AMQP.Queue.declare(chan)
+    {:ok, %{queue: queue}} = AMQP.Queue.declare(chan, "", queue_opts)
     {:ok, _} = AMQP.Basic.consume(chan, queue)
     {:ok, %{
         reply_queue: queue,
