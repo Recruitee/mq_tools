@@ -19,10 +19,10 @@ defmodule MQTools.JsonPacker do
   @behaviour MQTools.Packer
 
   def pack(term) do
-    Poison.encode!(term)
+    Jason.encode!(term)
   end
 
   def unpack(string) do
-    Poison.decode!(string)
+    Jason.decode!(string)
   end
 end
