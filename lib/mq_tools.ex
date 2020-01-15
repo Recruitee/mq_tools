@@ -7,11 +7,13 @@ defmodule MQTools do
 
   def start(_, _) do
     conn_opts = Application.get_env(:mq_tools, :connection)
+    queue_opts = Application.get_env(:mq_tools, :queue_opts, [])
+
     children = if conn_opts do
       [
         worker(MQTools.AMQPConnection, [conn_opts]),
         worker(MQTools.Client.Requests, []),
-        worker(MQTools.Client, []),
+        worker(MQTools.Client, [queue_opts]),
         worker(MQTools.Provider.Dispatcher, []),
         supervisor(MQTools.Provider.HandlerSupervisor, [])
       ]
