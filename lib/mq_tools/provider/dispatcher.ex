@@ -44,12 +44,12 @@ defmodule MQTools.Provider.Dispatcher do
           AMQP.Basic.nack(chan, meta.delivery_tag)
         end
 
-      {:reply, payload, meta} ->
+      {:reply, payload, %{reply_to: reply_to} = meta} when is_binary(reply_to) ->
         Logger.debug(
           "Replying to RPC #{meta.routing_key} (#{meta.correlation_id})" <> " | " <> payload
         )
 
-        AMQP.Basic.publish(chan, "", meta.reply_to, payload, correlation_id: meta.correlation_id)
+        AMQP.Basic.publish(chan, "", reply_to, payload, correlation_id: meta.correlation_id)
 
       other ->
         Logger.debug("#{__MODULE__} ignoring #{inspect(other)}")
