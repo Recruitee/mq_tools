@@ -6,7 +6,9 @@ defmodule MQTools.Provider.HandlerSupervisor do
   end
 
   def init(_) do
-    supervise([worker(MQTools.Provider.Handler, [], [restart: :temporary])], strategy: :simple_one_for_one)
+    supervise([worker(MQTools.Provider.Handler, [], restart: :temporary)],
+      strategy: :simple_one_for_one
+    )
   end
 
   def spawn_handler(args) do

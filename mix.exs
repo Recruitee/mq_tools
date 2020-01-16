@@ -23,7 +23,7 @@ defmodule MQTools.Provider.Mixfile do
   defp deps do
     [
       {:amqp, "~> 1.1"},
-      {:poison, "~> 3.1"},
+      {:jason, "~> 1.1"},
       {:uuid, "~> 1.1"}
     ]
   end

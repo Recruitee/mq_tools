@@ -1,5 +1,4 @@
 defmodule MQTools.Provider.Handler do
-
   import MQTools.Packer, only: [pack: 1, unpack: 1]
 
   def start_link(module, queue, data, meta) do
@@ -12,7 +11,7 @@ defmodule MQTools.Provider.Handler do
     send(MQTools.Provider.Dispatcher, {:reply, pack(reply), meta})
   rescue
     e ->
-      stacktrace = System.stacktrace
+      stacktrace = System.stacktrace()
       reply = %{"provider_error" => Exception.format(:error, e)}
       send(MQTools.Provider.Dispatcher, {:reply, pack(reply), meta})
       reraise(e, stacktrace)
