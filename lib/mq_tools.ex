@@ -9,7 +9,10 @@ defmodule MQTools do
 
   def start(_, _) do
     conn_opts = Application.get_env(:mq_tools, :connection)
-    queue_opts = Application.get_env(:mq_tools, :queue_opts, [])
+
+    queue_opts =
+      Application.get_env(:mq_tools, :queue_opts, [])
+      |> Keyword.put(:exclusive, true)
 
     children =
       if conn_opts do
