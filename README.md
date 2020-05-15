@@ -29,7 +29,7 @@ config :mq_tools, :mq_providers,
 defmodule MyRpcHandlers do
   use MQTools.Provider
 
-  defprc "foo.bar" do
+  defrpc "foo.bar" do
     %{"something" => something} -> "reply..."
     _ -> "handle other payload"
   end
